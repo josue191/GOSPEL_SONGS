@@ -1,0 +1,28 @@
+# A unique name for your project
+project_id = "gospel-songs"
+
+[api]
+# Port to use for the API URL
+port = 54321
+# Schemas to expose in your API (separate with commas)
+schemas = ["public", "storage", "graphql_public"]
+# Extra schemas to add to the search_path of every request
+extra_search_path = ["public", "extensions"]
+# The maximum number of rows returns from a view, table, or stored procedure
+max_rows = 1000
+
+[db]
+# Port to use for the local database URL
+port = 54322
+# The database major version to use (default: 15)
+major_version = 15
+
+[studio]
+# Port to use for Supabase Studio
+port = 54323
+
+# Email auth configuration
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false

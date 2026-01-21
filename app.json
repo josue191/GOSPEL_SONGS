@@ -1,0 +1,68 @@
+{
+    "expo": {
+        "name": "AFRISENS",
+        "slug": "afrisens",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": [
+            "assets/**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.afrisens.app",
+            "infoPlist": {
+                "NSCameraUsageDescription": "Afrisens needs camera access to upload verification videos and receipts.",
+                "NSMicrophoneUsageDescription": "Afrisens needs microphone access for video recording.",
+                "NSPhotoLibraryUsageDescription": "Afrisens needs photo library access to select images."
+            }
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "package": "com.afrisens.app",
+            "permissions": [
+                "CAMERA",
+                "READ_EXTERNAL_STORAGE",
+                "WRITE_EXTERNAL_STORAGE",
+                "RECORD_AUDIO"
+            ],
+            "versionCode": 1
+        },
+        "web": {
+            "favicon": "./assets/favicon.png",
+            "bundler": "metro"
+        },
+        "plugins": [
+            "expo-router",
+            [
+                "expo-notifications",
+                {
+                    "icon": "./assets/notification-icon.png",
+                    "color": "#ffffff",
+                    "sounds": [
+                        "./assets/notification.wav"
+                    ]
+                }
+            ]
+        ],
+        "scheme": "afrisens",
+        "extra": {
+            "router": {
+                "origin": false
+            },
+            "eas": {
+                "projectId": "YOUR_EAS_PROJECT_ID"
+            }
+        },
+        "owner": "afrisens"
+    }
+}
