@@ -6,11 +6,6 @@
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "light",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
         "assetBundlePatterns": [
             "assets/**/*"
         ],
@@ -47,10 +42,7 @@
                 "expo-notifications",
                 {
                     "icon": "./assets/notification-icon.png",
-                    "color": "#ffffff",
-                    "sounds": [
-                        "./assets/notification.wav"
-                    ]
+                    "color": "#ffffff"
                 }
             ]
         ],
@@ -58,11 +50,7 @@
         "extra": {
             "router": {
                 "origin": false
-            },
-            "eas": {
-                "projectId": "YOUR_EAS_PROJECT_ID"
             }
-        },
-        "owner": "afrisens"
+        }
     }
 }

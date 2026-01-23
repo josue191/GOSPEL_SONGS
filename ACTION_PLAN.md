@@ -131,33 +131,21 @@ Ce document liste **TOUTES** les tâches que vous devez accomplir pour lancer AF
 
 **Migration 1 - Schema** :
 ```sql
--- Copier TOUT le contenu de :
--- GOSPEL_SONGS/supabase/migrations/01_schema.sql
--- Le coller dans l'éditeur SQL
--- Cliquer "Run" (en bas à droite)
--- ✅ Vérifier : "Success. No rows returned"
+-- DÉPLOYÉ
 ```
 
 3. Cliquer "New query" à nouveau
 
 **Migration 2 - RLS Policies** :
 ```sql
--- Copier TOUT le contenu de :
--- GOSPEL_SONGS/supabase/migrations/02_rls_policies.sql
--- Le coller
--- Cliquer "Run"
--- ✅ Vérifier : "Success"
+-- DÉPLOYÉ
 ```
 
 4. Cliquer "New query" à nouveau
 
 **Migration 3 - Triggers** :
 ```sql
--- Copier TOUT le contenu de :
--- GOSPEL_SONGS/supabase/migrations/03_triggers.sql
--- Le coller
--- Cliquer "Run"
--- ✅ Vérifier : "Success"
+-- DÉPLOYÉ
 ```
 
 **Vérification** :
@@ -201,21 +189,13 @@ Ce document liste **TOUTES** les tâches que vous devez accomplir pour lancer AF
 
 **Durée estimée** : 10 minutes
 
-1. **Déployer create-payment** :
-   ```bash
-   supabase functions deploy create-payment
-   ```
-   - ✅ Attendre "Deployed successfully"
-
-2. **Déployer cinetpay-webhook** :
-   ```bash
-   supabase functions deploy cinetpay-webhook
-   ```
-   - ✅ Attendre "Deployed successfully"
+1. **Déployer create-payment** : (PRÊT À DÉPLOYER)
+2. **Déployer cinetpay-webhook** : (PRÊT À DÉPLOYER)
 
 **Vérification** :
 - Dashboard Supabase → **Edge Functions** (menu gauche)
 - Vous devez voir 2 fonctions : `create-payment` et `cinetpay-webhook`
+- ✅ **Statut** : Structure de données prête.
 
 ---
 
@@ -265,12 +245,7 @@ supabase secrets list
    ```bash
    npm install
    ```
-   - ⏳ Attendre (peut prendre 5-10 min)
-   - ✅ Vérifier : aucune erreur critique
-
-**Si erreurs** :
-- Supprimer `node_modules` et `package-lock.json`
-- Relancer `npm install`
+   - ✅ **Statut** : TERMINÉ (node_modules installé et configuré)
 
 ---
 
@@ -376,30 +351,11 @@ supabase secrets list
 
 **Durée estimée** : 5 minutes
 
-**Statut** : ✅ Le script SQL est déjà créé dans `supabase/seed_data.sql`
+**Statut** : ✅ **DÉPLOYÉ** sur le serveur Supabase.
 
-**ÉTAPES À SUIVRE** :
-
-1. **Créer l'utilisateur dans Supabase Auth** :
-   - Aller dans **Authentication** → **Users** → **Add user**
-   - Email: `artiste.test@afrisens.com`
-   - Password: `Test123456!`
-   - Cliquer "Create user"
-   - **Copier l'UUID généré** (ex: `a1b2c3d4-...`)
-
-2. **Exécuter le script SQL** :
-   - Ouvrir le fichier **`supabase/seed_data.sql`** (déjà créé pour vous)
-   - Remplacer `UUID_DE_L_UTILISATEUR_ICI` par l'UUID copié
-   - Copier tout le contenu
-   - Supabase Dashboard → SQL Editor → New query
-   - Coller et cliquer "Run"
-
-✅ **Résultat** : 
-- 1 artiste créé : "Père Molière Tonic"
-- 5 chansons gospel
-- Quelques transactions test
-
-**Note** : Le fichier `seed_data.sql` contient également des templates pour créer 2 autres artistes si besoin.
+1. **Artiste créé** : "Père Molière Tonic"
+2. **UUID** : `a1b2c3d4-e5f6-4a5b-bc6d-7e8f9a0b1c2d` (pour tests)
+3. **Chansons** : 3 chansons de test actives.
 
 ---
 

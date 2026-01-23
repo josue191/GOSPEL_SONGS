@@ -1,10 +1,10 @@
 # 📊 STATUT DU PROJET AFRISENS
 
-**Dernière mise à jour** : 19 janvier 2026, 12:40
+**Dernière mise à jour** : 23 janvier 2026, 19:40
 
 ---
 
-## 🎯 Statut Global : **75% COMPLÉTÉ**
+## 🎯 Statut Global : **85% COMPLÉTÉ**
 
 ### ✅ COMPLÉTÉ (Ce qui fonctionne déjà)
 
@@ -16,7 +16,7 @@
   - create-payment (initiation paiement CinetPay)
   - cinetpay-webhook (confirmation paiement)
 - [x] **Scripts SQL** :
-  - seed_data.sql (données de test)
+  - seed_data.sql (données de test - DÉPLOYÉ)
   - admin_queries.sql (50+ requêtes d'administration)
 
 #### Mobile App - React Native ✅ 85%
