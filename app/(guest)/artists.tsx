@@ -13,15 +13,18 @@ import {
     ActivityIndicator,
     TextInput,
     Image,
+    StatusBar,
 } from 'react-native'
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { Database } from '../../types/database.types'
+import { Colors } from '../../constants/Colors'
 
 type Artist = Database['public']['Tables']['artists']['Row']
 
 export default function ArtistsScreen() {
     const router = useRouter()
+    const theme = Colors.dark
     const [artists, setArtists] = useState<Artist[]>([])
     const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState('')
@@ -56,19 +59,20 @@ export default function ArtistsScreen() {
     function renderArtist({ item }: { item: Artist }) {
         return (
             <TouchableOpacity
-                style={styles.artistCard}
+                style={[styles.artistCard, { backgroundColor: theme.card, borderColor: theme.border }]}
                 onPress={() => router.push(`/(guest)/artist/${item.id}`)}
+                activeOpacity={0.7}
             >
-                {/* Profile Image */}
-                <View style={styles.artistImageContainer}>
+                {/* Profile Image with subtle border */}
+                <View style={[styles.artistImageContainer, { borderColor: theme.accent + '30' }]}>
                     {item.profile_image_url ? (
                         <Image
                             source={{ uri: item.profile_image_url }}
                             style={styles.artistImage}
                         />
                     ) : (
-                        <View style={[styles.artistImage, styles.placeholderImage]}>
-                            <Text style={styles.placeholderText}>
+                        <View style={[styles.artistImage, styles.placeholderImage, { backgroundColor: theme.secondary }]}>
+                            <Text style={[styles.placeholderText, { color: theme.accent }]}>
                                 {item.stage_name.charAt(0)}
                             </Text>
                         </View>
@@ -77,43 +81,52 @@ export default function ArtistsScreen() {
 
                 {/* Artist Info */}
                 <View style={styles.artistInfo}>
-                    <Text style={styles.artistName}>{item.stage_name}</Text>
+                    <Text style={[styles.artistName, { color: theme.text }]}>{item.stage_name}</Text>
                     {item.church_name && (
-                        <Text style={styles.artistChurch}>🏛️ {item.church_name}</Text>
+                        <Text style={[styles.artistChurch, { color: theme.muted }]}>
+                            ⛪ {item.church_name}
+                        </Text>
                     )}
                     {item.bio && (
-                        <Text style={styles.artistBio} numberOfLines={2}>
+                        <Text style={[styles.artistBio, { color: theme.muted + 'CC' }]} numberOfLines={1}>
                             {item.bio}
                         </Text>
                     )}
                 </View>
 
-                {/* Arrow */}
-                <Text style={styles.arrow}>›</Text>
+                {/* Action Indicator */}
+                <View style={[styles.actionIndicator, { backgroundColor: theme.primary + '20' }]}>
+                    <Text style={[styles.arrow, { color: theme.accent }]}>→</Text>
+                </View>
             </TouchableOpacity>
         )
     }
 
     if (loading) {
         return (
-            <View style={[styles.container, styles.centerContent]}>
-                <ActivityIndicator size="large" color="#10B981" />
-                <Text style={styles.loadingText}>Chargement des artistes...</Text>
+            <View style={[styles.container, styles.centerContent, { backgroundColor: theme.background }]}>
+                <ActivityIndicator size="large" color={theme.accent} />
+                <Text style={[styles.loadingText, { color: theme.muted }]}>Chargement des chantres...</Text>
             </View>
         )
     }
 
     return (
-        <View style={styles.container}>
-            {/* Search Bar */}
-            <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.searchInput}
-                    placeholder="Rechercher un artiste..."
-                    placeholderTextColor="#64748B"
-                    value={search}
-                    onChangeText={setSearch}
-                />
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
+            <StatusBar barStyle="light-content" />
+
+            {/* Search Header */}
+            <View style={styles.headerContainer}>
+                <View style={[styles.searchContainer, { backgroundColor: theme.card, borderColor: theme.border }]}>
+                    <Text style={styles.searchIcon}>🔍</Text>
+                    <TextInput
+                        style={[styles.searchInput, { color: theme.text }]}
+                        placeholder="Rechercher un chantre..."
+                        placeholderTextColor={theme.muted}
+                        value={search}
+                        onChangeText={setSearch}
+                    />
+                </View>
             </View>
 
             {/* Artists List */}
@@ -122,19 +135,22 @@ export default function ArtistsScreen() {
                 renderItem={renderArtist}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={styles.listContent}
+                showsVerticalScrollIndicator={false}
                 ListEmptyComponent={
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyText}>Aucun artiste trouvé</Text>
+                        <Text style={styles.emptyIcon}>🎵</Text>
+                        <Text style={[styles.emptyText, { color: theme.muted }]}>Aucun chantre trouvé</Text>
                     </View>
                 }
             />
 
             {/* Floating History Button */}
             <TouchableOpacity
-                style={styles.historyButton}
+                style={[styles.historyButton, { backgroundColor: theme.accent }]}
                 onPress={() => router.push('/(guest)/history')}
+                activeOpacity={0.9}
             >
-                <Text style={styles.historyButtonText}>📜 Mes Dons</Text>
+                <Text style={styles.historyButtonText}>📜 MES DONS</Text>
             </TouchableOpacity>
         </View>
     )
@@ -143,7 +159,6 @@ export default function ArtistsScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0F172A',
     },
     centerContent: {
         justifyContent: 'center',
@@ -151,98 +166,132 @@ const styles = StyleSheet.create({
         gap: 12,
     },
     loadingText: {
-        color: '#94A3B8',
         fontSize: 16,
+        fontWeight: '500',
+    },
+    headerContainer: {
+        padding: 20,
+        paddingBottom: 10,
     },
     searchContainer: {
-        padding: 16,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 16,
+        paddingHorizontal: 16,
+        borderWidth: 1,
+        height: 56,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 4,
+    },
+    searchIcon: {
+        fontSize: 18,
+        marginRight: 12,
     },
     searchInput: {
-        backgroundColor: '#1E293B',
-        borderRadius: 12,
-        padding: 16,
-        color: '#FFFFFF',
+        flex: 1,
         fontSize: 16,
+        fontWeight: '500',
     },
     listContent: {
-        padding: 16,
+        padding: 20,
         paddingBottom: 100,
     },
     artistCard: {
         flexDirection: 'row',
-        backgroundColor: '#1E293B',
-        borderRadius: 12,
+        borderRadius: 20,
         padding: 16,
-        marginBottom: 12,
+        marginBottom: 16,
         alignItems: 'center',
-        gap: 16,
+        borderWidth: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
+        elevation: 3,
     },
     artistImageContainer: {
-        width: 64,
-        height: 64,
+        width: 60,
+        height: 60,
+        borderRadius: 18,
+        borderWidth: 2,
+        padding: 2,
+        marginRight: 16,
     },
     artistImage: {
-        width: 64,
-        height: 64,
-        borderRadius: 32,
+        width: '100%',
+        height: '100%',
+        borderRadius: 14,
     },
     placeholderImage: {
-        backgroundColor: '#6366F1',
         justifyContent: 'center',
         alignItems: 'center',
     },
     placeholderText: {
-        color: '#FFFFFF',
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: '900',
     },
     artistInfo: {
         flex: 1,
-        gap: 4,
+        justifyContent: 'center',
     },
     artistName: {
-        color: '#FFFFFF',
+        fontSize: 18,
+        fontWeight: '800',
+        marginBottom: 2,
+    },
+    artistChurch: {
+        fontSize: 13,
+        fontWeight: '600',
+        marginBottom: 4,
+    },
+    artistBio: {
+        fontSize: 12,
+        fontStyle: 'italic',
+    },
+    actionIndicator: {
+        width: 32,
+        height: 32,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    arrow: {
         fontSize: 18,
         fontWeight: 'bold',
     },
-    artistChurch: {
-        color: '#94A3B8',
-        fontSize: 14,
-    },
-    artistBio: {
-        color: '#64748B',
-        fontSize: 13,
-        marginTop: 4,
-    },
-    arrow: {
-        color: '#64748B',
-        fontSize: 32,
-    },
     emptyState: {
-        padding: 40,
+        padding: 60,
         alignItems: 'center',
     },
+    emptyIcon: {
+        fontSize: 48,
+        marginBottom: 16,
+        opacity: 0.3,
+    },
     emptyText: {
-        color: '#64748B',
         fontSize: 16,
+        fontWeight: '600',
     },
     historyButton: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
-        backgroundColor: '#10B981',
-        paddingVertical: 14,
-        paddingHorizontal: 24,
-        borderRadius: 28,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        bottom: 24,
+        alignSelf: 'center',
+        paddingVertical: 16,
+        paddingHorizontal: 32,
+        borderRadius: 30,
+        shadowColor: '#F59E0B',
+        shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 5,
+        shadowRadius: 20,
+        elevation: 10,
     },
     historyButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
+        color: '#0F172A',
+        fontSize: 14,
+        fontWeight: '900',
+        letterSpacing: 1,
     },
 })

@@ -3,8 +3,8 @@
 // Initiates payment with CinetPay
 // ============================================
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import { serve } from 'std/http/server.ts'
+import { createClient } from 'supabase'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,7 +19,7 @@ interface PaymentRequest {
   device_id: string
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -106,7 +106,6 @@ serve(async (req) => {
     }
 
     // Prepare CinetPay request for seamless payment
-    // Documentation: https://docs.cinetpay.com
     const cinetpayPayload = {
       apikey: cinetpayApiKey,
       site_id: parseInt(cinetpaySiteId),
@@ -118,7 +117,7 @@ serve(async (req) => {
       customer_surname: donor_name ? '' : 'Anonyme',
       notify_url: cinetpayNotifyUrl,
       return_url: `afrisens://payment-return/${paymentAttempt.id}`, // Deep link
-      channels: 'ALL', // Accept all payment methods (Mobile Money, Card, etc.)
+      channels: 'ALL', // Accept all payment methods
       metadata: JSON.stringify({
         artist_id,
         device_id,
@@ -175,7 +174,7 @@ serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Unexpected error:', error)
     return new Response(
       JSON.stringify({ error: 'Internal server error', message: error.message }),

@@ -3,38 +3,43 @@
 // ============================================
 
 import { Stack } from 'expo-router'
+import { Colors } from '../../constants/Colors'
 
 export default function GuestLayout() {
+    const theme = Colors.dark
+
     return (
         <Stack
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#0F172A',
+                    backgroundColor: theme.background,
                 },
-                headerTintColor: '#fff',
+                headerTintColor: theme.text,
                 headerTitleStyle: {
-                    fontWeight: 'bold',
+                    fontWeight: '900',
+                    fontSize: 20,
                 },
+                headerShadowVisible: false, // Clean look
             }}
         >
             <Stack.Screen
                 name="artists"
                 options={{
-                    title: 'Artistes Gospel',
+                    title: 'CHANTRES',
                     headerBackTitle: 'Retour'
                 }}
             />
             <Stack.Screen
                 name="artist/[id]"
                 options={{
-                    title: 'Artiste',
+                    title: 'DÉTAILS',
                     headerBackTitle: 'Liste'
                 }}
             />
             <Stack.Screen
                 name="history"
                 options={{
-                    title: 'Mes Dons'
+                    title: 'DONS'
                 }}
             />
         </Stack>

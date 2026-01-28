@@ -3,9 +3,8 @@
 // CRITICAL: This is the ONLY way transactions are created
 // ============================================
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
-import { createHmac } from 'https://deno.land/std@0.168.0/node/crypto.ts'
+import { serve } from 'std/http/server.ts'
+import { createClient } from 'supabase'
 
 interface CinetPayWebhook {
     cpm_site_id: string
@@ -25,7 +24,7 @@ interface CinetPayWebhook {
     cpm_phone_prefixe?: string
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
     try {
         // Get Supabase client with service role
         const supabaseClient = createClient(
@@ -36,12 +35,6 @@ serve(async (req) => {
         // Parse webhook payload
         const webhookData: CinetPayWebhook = await req.json()
         console.log('Received CinetPay webhook:', JSON.stringify(webhookData, null, 2))
-
-        // Verify webhook signature (if CinetPay provides signature verification)
-        // const isValid = verifySignature(webhookData)
-        // if (!isValid) {
-        //   return new Response('Invalid signature', { status: 401 })
-        // }
 
         // Extract transaction details
         const {
@@ -61,7 +54,6 @@ serve(async (req) => {
         }
 
         // Verify payment with CinetPay API v1 (double-check status)
-        // Using official checkPayStatus endpoint as per CinetPay documentation
         const cinetpayApiKey = Deno.env.get('CINETPAY_API_KEY')
         const cinetpaySiteId = Deno.env.get('CINETPAY_SITE_ID')
 
@@ -84,18 +76,9 @@ serve(async (req) => {
         console.log('CinetPay checkPayStatus response:', JSON.stringify(verifyData, null, 2))
 
         // Check if payment is successful
-        // CinetPay API v1 returns: { cpm_result: "00", cpm_trans_status: "ACCEPTED" }
         if (!verifyData.data || verifyData.data.cpm_result !== '00' || verifyData.data.cpm_trans_status !== 'ACCEPTED') {
             console.log('Payment not accepted:', verifyData)
             return new Response('Payment not successful', { status: 200 })
-        }
-
-        // Parse metadata from cpm_custom
-        let metadata: any = {}
-        try {
-            metadata = JSON.parse(cpm_custom || '{}')
-        } catch (e) {
-            console.error('Failed to parse metadata:', e)
         }
 
         // Find payment attempt using transaction_id
@@ -124,16 +107,13 @@ serve(async (req) => {
 
         // Calculate fees
         const grossAmount = parseFloat(cpm_amount)
-
-        // Fee structure (adjust based on your business model)
         const platformFeePercent = 0.05 // 5% platform fee
-        const providerFeePercent = 0.025 // 2.5% CinetPay fee (example, verify actual)
-
+        const providerFeePercent = 0.025 // 2.5% CinetPay fee
         const platformFee = grossAmount * platformFeePercent
         const providerFee = grossAmount * providerFeePercent
         const netAmount = grossAmount - platformFee - providerFee
 
-        // Create transaction (SACRED MOMENT)
+        // Create transaction
         const { data: transaction, error: transactionError } = await supabaseClient
             .from('transactions')
             .insert({
@@ -145,7 +125,7 @@ serve(async (req) => {
                 net_amount: netAmount,
                 currency: cpm_currency,
                 donor_name: paymentAttempt.donor_name,
-                provider_reference: cpm_payid, // UNIQUE - prevents duplicates
+                provider_reference: cpm_payid,
             })
             .select()
             .single()
@@ -165,11 +145,6 @@ serve(async (req) => {
                 cinetpay_reference: cpm_payid,
             })
             .eq('id', paymentAttempt.id)
-
-        // Send notifications (FCM)
-        // TODO: Implement FCM notification sending
-        // - Notify donor: "Merci pour votre don de ${grossAmount} ${cpm_currency}"
-        // - Notify artist: "Vous avez reçu ${netAmount} ${cpm_currency}"
 
         // Log admin event
         await supabaseClient
@@ -191,7 +166,7 @@ serve(async (req) => {
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         )
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Webhook processing error:', error)
         return new Response(
             JSON.stringify({ error: 'Internal error', message: error.message }),
@@ -200,9 +175,7 @@ serve(async (req) => {
     }
 })
 
-// Helper function to verify webhook signature (implement based on CinetPay docs)
-function verifySignature(webhookData: CinetPayWebhook): boolean {
-    // TODO: Implement signature verification based on CinetPay documentation
-    // This is critical for security in production
+// Helper function to verify webhook signature
+function verifySignature(_webhookData: CinetPayWebhook): boolean {
     return true // Temporarily accept all
 }

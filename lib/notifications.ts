@@ -69,14 +69,21 @@ export async function registerForPushNotifications(): Promise<string | null> {
  */
 export async function saveFcmToken(userId: string, token: string): Promise<void> {
     try {
-        // You may want to create a separate table for device tokens
-        // For now, we'll just log it
         console.log('Saving FCM token for user:', userId, token)
 
-        // TODO: Store token in database for backend to use
-        // await supabase
-        //   .from('device_tokens')
-        //   .upsert({ user_id: userId, fcm_token: token })
+        const { error } = await supabase
+            .from('device_tokens')
+            .upsert({
+                user_id: userId,
+                fcm_token: token,
+                device_type: Platform.OS,
+                last_seen_at: new Date().toISOString()
+            }, {
+                onConflict: 'user_id, fcm_token'
+            })
+
+        if (error) throw error
+        console.log('FCM token saved successfully')
 
     } catch (error) {
         console.error('Error saving FCM token:', error)
