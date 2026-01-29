@@ -11,11 +11,14 @@ import {
     Platform,
     ScrollView,
     Image,
+    StatusBar,
 } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { supabase } from '../../../lib/supabase'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
+import { Colors } from '../../../constants/Colors'
+import { Typography } from '../../../constants/Typography'
 
 type Step = 1 | 2 | 3
 
@@ -29,6 +32,7 @@ interface PasswordCriteria {
 
 export default function RegisterScreen() {
     const router = useRouter()
+    const theme = Colors.dark
     const [currentStep, setCurrentStep] = useState<Step>(1)
     const [loading, setLoading] = useState(false)
 
@@ -271,22 +275,25 @@ export default function RegisterScreen() {
                 <View key={step} style={styles.stepWrapper}>
                     <View style={[
                         styles.stepCircle,
-                        currentStep >= step && styles.stepCircleActive,
-                        currentStep > step && styles.stepCircleCompleted
+                        { borderColor: theme.border },
+                        currentStep >= step && { backgroundColor: theme.accent, borderColor: theme.accent },
+                        currentStep > step && { backgroundColor: '#10B981', borderColor: '#10B981' }
                     ]}>
                         {currentStep > step ? (
-                            <Ionicons name="checkmark" size={20} color="#FFFFFF" />
+                            <Ionicons name="checkmark" size={20} color={theme.primary} />
                         ) : (
                             <Text style={[
                                 styles.stepNumber,
-                                currentStep >= step && styles.stepNumberActive
+                                { color: theme.muted },
+                                currentStep >= step && { color: theme.primary }
                             ]}>{step}</Text>
                         )}
                     </View>
                     {step < 3 && (
                         <View style={[
                             styles.stepLine,
-                            currentStep > step && styles.stepLineActive
+                            { backgroundColor: theme.border },
+                            currentStep > step && { backgroundColor: '#10B981' }
                         ]} />
                     )}
                 </View>
@@ -320,17 +327,17 @@ export default function RegisterScreen() {
     )
 
     const renderStep1 = () => (
-        <View style={styles.card}>
-            <Text style={styles.cardTitle}>📋 Informations Personnelles</Text>
+        <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
+            <Text style={[styles.cardTitle, { color: theme.text }]}>📋 Informations Personnelles</Text>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Prénom *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="person-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Prénom *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="person-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="Votre prénom"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={firstName}
                         onChangeText={setFirstName}
                     />
@@ -338,13 +345,13 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Nom *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="person-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Nom *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="person-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="Votre nom"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={lastName}
                         onChangeText={setLastName}
                     />
@@ -352,13 +359,13 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Nom de scène *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="musical-notes-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Nom de scène *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="musical-notes-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="Ex: Frère Moïse"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={stageName}
                         onChangeText={setStageName}
                     />
@@ -366,31 +373,31 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Sexe *</Text>
+                <Text style={[styles.label, { color: theme.text }]}>Sexe *</Text>
                 <View style={styles.genderContainer}>
                     <TouchableOpacity
-                        style={[styles.genderButton, gender === 'M' && styles.genderButtonActive]}
+                        style={[styles.genderButton, { borderColor: theme.accent, backgroundColor: theme.card }, gender === 'M' && { backgroundColor: theme.accent }]}
                         onPress={() => setGender('M')}
                     >
                         <Ionicons
                             name="male"
                             size={24}
-                            color={gender === 'M' ? '#FFFFFF' : '#06B6D4'}
+                            color={gender === 'M' ? theme.primary : theme.accent}
                         />
-                        <Text style={[styles.genderText, gender === 'M' && styles.genderTextActive]}>
+                        <Text style={[styles.genderText, { color: theme.accent }, gender === 'M' && { color: theme.primary }]}>
                             Masculin
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.genderButton, gender === 'F' && styles.genderButtonActive]}
+                        style={[styles.genderButton, { borderColor: theme.accent, backgroundColor: theme.card }, gender === 'F' && { backgroundColor: theme.accent }]}
                         onPress={() => setGender('F')}
                     >
                         <Ionicons
                             name="female"
                             size={24}
-                            color={gender === 'F' ? '#FFFFFF' : '#06B6D4'}
+                            color={gender === 'F' ? theme.primary : theme.accent}
                         />
-                        <Text style={[styles.genderText, gender === 'F' && styles.genderTextActive]}>
+                        <Text style={[styles.genderText, { color: theme.accent }, gender === 'F' && { color: theme.primary }]}>
                             Féminin
                         </Text>
                     </TouchableOpacity>
@@ -398,13 +405,13 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Date de naissance *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="calendar-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Date de naissance *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="calendar-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="JJ/MM/AAAA"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={birthDate}
                         onChangeText={setBirthDate}
                     />
@@ -412,13 +419,13 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Téléphone *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="call-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Téléphone *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="call-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="+243 XXX XXX XXX"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={phone}
                         onChangeText={setPhone}
                         keyboardType="phone-pad"
@@ -426,17 +433,17 @@ export default function RegisterScreen() {
                 </View>
             </View>
 
-            <View style={styles.addressSection}>
-                <Text style={styles.sectionTitle}>📍 Adresse (Nord-Kivu, Goma)</Text>
+            <View style={[styles.addressSection, { borderTopColor: theme.border }]}>
+                <Text style={[styles.sectionTitle, { color: theme.text }]}>📍 Adresse (Nord-Kivu, Goma)</Text>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Commune *</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="location-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                    <Text style={[styles.label, { color: theme.text }]}>Commune *</Text>
+                    <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                        <Ionicons name="location-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { color: theme.text }]}
                             placeholder="Ex: Goma"
-                            placeholderTextColor="#94A3B8"
+                            placeholderTextColor={theme.muted}
                             value={commune}
                             onChangeText={setCommune}
                         />
@@ -444,13 +451,13 @@ export default function RegisterScreen() {
                 </View>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Avenue *</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="map-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                    <Text style={[styles.label, { color: theme.text }]}>Avenue *</Text>
+                    <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                        <Ionicons name="map-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { color: theme.text }]}
                             placeholder="Ex: Avenue de la Paix"
-                            placeholderTextColor="#94A3B8"
+                            placeholderTextColor={theme.muted}
                             value={avenue}
                             onChangeText={setAvenue}
                         />
@@ -458,13 +465,13 @@ export default function RegisterScreen() {
                 </View>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Numéro (Optionnel)</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="home-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                    <Text style={[styles.label, { color: theme.text }]}>Numéro (Optionnel)</Text>
+                    <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                        <Ionicons name="home-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { color: theme.text }]}
                             placeholder="Ex: 123"
-                            placeholderTextColor="#94A3B8"
+                            placeholderTextColor={theme.muted}
                             value={number}
                             onChangeText={setNumber}
                         />
@@ -475,53 +482,53 @@ export default function RegisterScreen() {
     )
 
     const renderStep2 = () => (
-        <View style={styles.card}>
-            <Text style={styles.cardTitle}>📸 Documents de Vérification</Text>
-            <Text style={styles.cardSubtitle}>
+        <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
+            <Text style={[styles.cardTitle, { color: theme.text }]}>📸 Documents de Vérification</Text>
+            <Text style={[styles.cardSubtitle, { color: theme.muted }]}>
                 Pour vérifier votre identité, nous avons besoin de votre carte d'électeur et d'un selfie
             </Text>
 
             <View style={styles.uploadSection}>
-                <Text style={styles.label}>Carte d'électeur *</Text>
+                <Text style={[styles.label, { color: theme.text }]}>Carte d'électeur *</Text>
                 <TouchableOpacity
-                    style={styles.uploadButton}
+                    style={[styles.uploadButton, { borderColor: theme.border }]}
                     onPress={() => pickImage('voterCard')}
                 >
                     {voterCardImage ? (
                         <View style={styles.imagePreviewContainer}>
                             <Image source={{ uri: voterCardImage }} style={styles.imagePreview} />
-                            <View style={styles.checkmarkOverlay}>
+                            <View style={[styles.checkmarkOverlay, { backgroundColor: theme.card }]}>
                                 <Ionicons name="checkmark-circle" size={32} color="#10B981" />
                             </View>
                         </View>
                     ) : (
-                        <View style={styles.uploadPlaceholder}>
-                            <Ionicons name="card-outline" size={48} color="#06B6D4" />
-                            <Text style={styles.uploadText}>Télécharger la carte d'électeur</Text>
-                            <Text style={styles.uploadHint}>Format: JPG, PNG</Text>
+                        <View style={[styles.uploadPlaceholder, { backgroundColor: theme.background }]}>
+                            <Ionicons name="card-outline" size={48} color={theme.accent} />
+                            <Text style={[styles.uploadText, { color: theme.accent }]}>Télécharger la carte d'électeur</Text>
+                            <Text style={[styles.uploadHint, { color: theme.muted }]}>Format: JPG, PNG</Text>
                         </View>
                     )}
                 </TouchableOpacity>
             </View>
 
             <View style={styles.uploadSection}>
-                <Text style={styles.label}>Selfie (Photo de vous) *</Text>
+                <Text style={[styles.label, { color: theme.text }]}>Selfie (Photo de vous) *</Text>
                 <TouchableOpacity
-                    style={styles.uploadButton}
+                    style={[styles.uploadButton, { borderColor: theme.border }]}
                     onPress={() => pickImage('selfie')}
                 >
                     {selfieImage ? (
                         <View style={styles.imagePreviewContainer}>
                             <Image source={{ uri: selfieImage }} style={styles.imagePreview} />
-                            <View style={styles.checkmarkOverlay}>
+                            <View style={[styles.checkmarkOverlay, { backgroundColor: theme.card }]}>
                                 <Ionicons name="checkmark-circle" size={32} color="#10B981" />
                             </View>
                         </View>
                     ) : (
-                        <View style={styles.uploadPlaceholder}>
-                            <Ionicons name="camera-outline" size={48} color="#06B6D4" />
-                            <Text style={styles.uploadText}>Prendre un selfie</Text>
-                            <Text style={styles.uploadHint}>Photo claire de votre visage</Text>
+                        <View style={[styles.uploadPlaceholder, { backgroundColor: theme.background }]}>
+                            <Ionicons name="camera-outline" size={48} color={theme.accent} />
+                            <Text style={[styles.uploadText, { color: theme.accent }]}>Prendre un selfie</Text>
+                            <Text style={[styles.uploadHint, { color: theme.muted }]}>Photo claire de votre visage</Text>
                         </View>
                     )}
                 </TouchableOpacity>
@@ -530,20 +537,20 @@ export default function RegisterScreen() {
     )
 
     const renderStep3 = () => (
-        <View style={styles.card}>
-            <Text style={styles.cardTitle}>🔒 Sécurité du Compte</Text>
-            <Text style={styles.cardSubtitle}>
+        <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
+            <Text style={[styles.cardTitle, { color: theme.text }]}>🔒 Sécurité du Compte</Text>
+            <Text style={[styles.cardSubtitle, { color: theme.muted }]}>
                 Créez un mot de passe sécurisé pour protéger votre compte
             </Text>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Email *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="mail-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Email *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="mail-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="votre@email.com"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={email}
                         onChangeText={setEmail}
                         autoCapitalize="none"
@@ -553,13 +560,13 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Mot de passe *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Mot de passe *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="lock-closed-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="Créer un mot de passe"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={password}
                         onChangeText={validatePassword}
                         secureTextEntry
@@ -570,13 +577,13 @@ export default function RegisterScreen() {
             {password.length > 0 && renderPasswordCriteria()}
 
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Confirmer le mot de passe *</Text>
-                <View style={styles.inputWrapper}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#06B6D4" style={styles.inputIcon} />
+                <Text style={[styles.label, { color: theme.text }]}>Confirmer le mot de passe *</Text>
+                <View style={[styles.inputWrapper, { backgroundColor: theme.background, borderColor: theme.border }]}>
+                    <Ionicons name="lock-closed-outline" size={20} color={theme.accent} style={styles.inputIcon} />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { color: theme.text }]}
                         placeholder="Confirmer le mot de passe"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={theme.muted}
                         value={confirmPassword}
                         onChangeText={setConfirmPassword}
                         secureTextEntry
@@ -604,12 +611,13 @@ export default function RegisterScreen() {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+            style={[styles.container, { backgroundColor: theme.background }]}
         >
+            <StatusBar barStyle="light-content" />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Créer un compte artiste</Text>
-                    <Text style={styles.subtitle}>Rejoignez la communauté AFRISENS</Text>
+                    <Text style={[styles.title, { color: theme.text }]}>Créer un compte artiste</Text>
+                    <Text style={[styles.subtitle, { color: theme.muted }]}>Rejoignez la communauté AFRISENS</Text>
                 </View>
 
                 {renderStepper()}
@@ -621,25 +629,25 @@ export default function RegisterScreen() {
                 <View style={styles.navigationButtons}>
                     {currentStep > 1 && (
                         <TouchableOpacity
-                            style={styles.backButton}
+                            style={[styles.backButton, { borderColor: theme.accent, backgroundColor: 'transparent' }]}
                             onPress={handleBack}
                         >
-                            <Ionicons name="arrow-back" size={20} color="#06B6D4" />
-                            <Text style={styles.backButtonText}>Précédent</Text>
+                            <Ionicons name="arrow-back" size={20} color={theme.accent} />
+                            <Text style={[styles.backButtonText, { color: theme.accent }]}>Précédent</Text>
                         </TouchableOpacity>
                     )}
 
                     {currentStep < 3 ? (
                         <TouchableOpacity
-                            style={styles.nextButton}
+                            style={[styles.nextButton, { backgroundColor: theme.accent }]}
                             onPress={handleNext}
                         >
-                            <Text style={styles.nextButtonText}>Suivant</Text>
-                            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+                            <Text style={[styles.nextButtonText, { color: theme.primary }]}>Suivant</Text>
+                            <Ionicons name="arrow-forward" size={20} color={theme.primary} />
                         </TouchableOpacity>
                     ) : (
                         <TouchableOpacity
-                            style={[styles.submitButton, loading && styles.submitButtonDisabled]}
+                            style={[styles.submitButton, loading && styles.submitButtonDisabled, { backgroundColor: '#10B981' }]}
                             onPress={signUp}
                             disabled={loading}
                         >
@@ -656,10 +664,10 @@ export default function RegisterScreen() {
                 </View>
 
                 <View style={styles.footer}>
-                    <Text style={styles.footerText}>Déjà un compte ?</Text>
+                    <Text style={[styles.footerText, { color: theme.muted }]}>Déjà un compte ?</Text>
                     <Link href="/(artist)/auth/login" asChild>
                         <TouchableOpacity>
-                            <Text style={styles.link}>Se connecter</Text>
+                            <Text style={[styles.link, { color: theme.accent }]}>Se connecter</Text>
                         </TouchableOpacity>
                     </Link>
                 </View>
@@ -685,7 +693,6 @@ function CriteriaItem({ text, met }: { text: string; met: boolean }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F1F5F9',
     },
     scrollContent: {
         flexGrow: 1,
@@ -697,14 +704,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     title: {
-        fontSize: 26,
-        fontWeight: 'bold',
-        color: '#0F172A',
+        ...Typography.presets.heading2,
         marginBottom: 8,
     },
     subtitle: {
-        fontSize: 15,
-        color: '#64748B',
+        ...Typography.presets.body,
         textAlign: 'center',
     },
 
@@ -724,61 +728,39 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#E2E8F0',
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: '#CBD5E1',
-    },
-    stepCircleActive: {
-        backgroundColor: '#06B6D4',
-        borderColor: '#06B6D4',
-    },
-    stepCircleCompleted: {
-        backgroundColor: '#10B981',
-        borderColor: '#10B981',
     },
     stepNumber: {
+        ...Typography.presets.bodyBold,
         fontSize: 16,
-        fontWeight: 'bold',
-        color: '#94A3B8',
-    },
-    stepNumberActive: {
-        color: '#FFFFFF',
     },
     stepLine: {
         width: 60,
         height: 3,
-        backgroundColor: '#E2E8F0',
         marginHorizontal: 8,
-    },
-    stepLineActive: {
-        backgroundColor: '#10B981',
     },
 
     // Card Styles
     card: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: 16,
+        borderRadius: 24,
         padding: 24,
         marginBottom: 20,
+        borderWidth: 1,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 3,
+        shadowRadius: 20,
+        elevation: 8,
     },
     cardTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#0F172A',
+        ...Typography.presets.heading3,
         marginBottom: 8,
     },
     cardSubtitle: {
-        fontSize: 14,
-        color: '#64748B',
+        ...Typography.presets.bodySmall,
         marginBottom: 20,
-        lineHeight: 20,
     },
 
     // Input Styles
@@ -786,18 +768,15 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     label: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#334155',
+        ...Typography.presets.bodySmall,
+        fontFamily: Typography.families.medium,
         marginBottom: 8,
     },
     inputWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F8FAFC',
-        borderRadius: 12,
+        borderRadius: 16,
         borderWidth: 1,
-        borderColor: '#E2E8F0',
         paddingHorizontal: 12,
     },
     inputIcon: {
@@ -805,9 +784,8 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        padding: 14,
-        color: '#0F172A',
-        fontSize: 15,
+        padding: 16,
+        ...Typography.presets.body,
     },
 
     // Gender Selection
@@ -821,23 +799,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 16,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#06B6D4',
-        backgroundColor: '#F8FAFC',
+        borderRadius: 16,
+        borderWidth: 1.5,
         gap: 8,
     },
-    genderButtonActive: {
-        backgroundColor: '#06B6D4',
-        borderColor: '#06B6D4',
-    },
     genderText: {
+        ...Typography.presets.bodyBold,
         fontSize: 15,
-        fontWeight: '600',
-        color: '#06B6D4',
-    },
-    genderTextActive: {
-        color: '#FFFFFF',
     },
 
     // Address Section
@@ -845,12 +813,9 @@ const styles = StyleSheet.create({
         marginTop: 12,
         paddingTop: 20,
         borderTopWidth: 1,
-        borderTopColor: '#E2E8F0',
     },
     sectionTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#0F172A',
+        ...Typography.presets.bodyBold,
         marginBottom: 16,
     },
 
@@ -859,9 +824,8 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     uploadButton: {
-        borderRadius: 12,
+        borderRadius: 16,
         borderWidth: 2,
-        borderColor: '#E2E8F0',
         borderStyle: 'dashed',
         overflow: 'hidden',
     },
@@ -869,17 +833,15 @@ const styles = StyleSheet.create({
         padding: 32,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#F8FAFC',
     },
     uploadText: {
+        ...Typography.presets.bodyBold,
         fontSize: 15,
-        fontWeight: '600',
-        color: '#06B6D4',
         marginTop: 12,
     },
     uploadHint: {
-        fontSize: 13,
-        color: '#94A3B8',
+        ...Typography.presets.caption,
+        textTransform: 'none',
         marginTop: 4,
     },
     imagePreviewContainer: {
@@ -894,15 +856,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 12,
         right: 12,
-        backgroundColor: '#FFFFFF',
         borderRadius: 20,
         padding: 4,
     },
 
     // Password Criteria
     criteriaContainer: {
-        backgroundColor: '#F8FAFC',
-        borderRadius: 12,
+        backgroundColor: 'rgba(255,255,255,0.03)',
+        borderRadius: 16,
         padding: 16,
         marginTop: 12,
         gap: 10,
@@ -916,7 +877,7 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         borderRadius: 10,
-        backgroundColor: '#E2E8F0',
+        backgroundColor: 'rgba(255,255,255,0.1)',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -924,12 +885,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#10B981',
     },
     criteriaText: {
-        fontSize: 13,
-        color: '#64748B',
+        ...Typography.presets.caption,
+        textTransform: 'none',
     },
     criteriaTextMet: {
         color: '#10B981',
-        fontWeight: '500',
+        fontFamily: Typography.families.medium,
     },
 
     // Match Indicator
@@ -942,9 +903,10 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     matchSuccessText: {
-        fontSize: 13,
+        ...Typography.presets.caption,
+        textTransform: 'none',
         color: '#10B981',
-        fontWeight: '500',
+        fontFamily: Typography.families.medium,
     },
     matchError: {
         flexDirection: 'row',
@@ -952,9 +914,10 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     matchErrorText: {
-        fontSize: 13,
+        ...Typography.presets.caption,
+        textTransform: 'none',
         color: '#EF4444',
-        fontWeight: '500',
+        fontFamily: Typography.families.medium,
     },
 
     // Navigation Buttons
@@ -968,49 +931,45 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: '#06B6D4',
-        backgroundColor: '#FFFFFF',
+        padding: 18,
+        borderRadius: 16,
+        borderWidth: 1.5,
         gap: 8,
     },
     backButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#06B6D4',
+        ...Typography.presets.bodyBold,
     },
     nextButton: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
-        borderRadius: 12,
-        backgroundColor: '#06B6D4',
+        padding: 18,
+        borderRadius: 16,
         gap: 8,
+        shadowColor: Colors.dark.accent,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 5,
     },
     nextButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
+        ...Typography.presets.bodyBold,
     },
     submitButton: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
-        borderRadius: 12,
-        backgroundColor: '#10B981',
+        padding: 18,
+        borderRadius: 16,
         gap: 8,
     },
     submitButtonDisabled: {
         opacity: 0.6,
     },
     submitButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        ...Typography.presets.bodyBold,
         color: '#FFFFFF',
     },
 
@@ -1023,12 +982,10 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     footerText: {
-        color: '#64748B',
-        fontSize: 14,
+        ...Typography.presets.bodySmall,
     },
     link: {
-        color: '#06B6D4',
+        ...Typography.presets.bodyBold,
         fontSize: 14,
-        fontWeight: 'bold',
     },
 })

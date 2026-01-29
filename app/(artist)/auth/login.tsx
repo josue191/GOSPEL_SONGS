@@ -10,15 +10,19 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    StatusBar,
 } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { supabase } from '../../../lib/supabase'
+import { Colors } from '../../../constants/Colors'
+import { Typography } from '../../../constants/Typography'
 
 export default function LoginScreen() {
     const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
+    const theme = Colors.dark
 
     async function signInWithEmail() {
         setLoading(true)
@@ -55,22 +59,23 @@ export default function LoginScreen() {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+            style={[styles.container, { backgroundColor: theme.background }]}
         >
+            <StatusBar barStyle="light-content" />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
                     <Text style={styles.icon}>🎤</Text>
-                    <Text style={styles.title}>Espace Artiste</Text>
-                    <Text style={styles.subtitle}>Connectez-vous pour gérer votre musique</Text>
+                    <Text style={[styles.title, { color: theme.text }]}>Espace Artiste</Text>
+                    <Text style={[styles.subtitle, { color: theme.muted }]}>Connectez-vous pour gérer votre musique</Text>
                 </View>
 
                 <View style={styles.form}>
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Email</Text>
+                        <Text style={[styles.label, { color: theme.text }]}>Email</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: theme.card, borderColor: theme.border, color: theme.text }]}
                             placeholder="votre@email.com"
-                            placeholderTextColor="#64748B"
+                            placeholderTextColor={theme.muted}
                             value={email}
                             onChangeText={setEmail}
                             autoCapitalize="none"
@@ -79,11 +84,11 @@ export default function LoginScreen() {
                     </View>
 
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Mot de passe</Text>
+                        <Text style={[styles.label, { color: theme.text }]}>Mot de passe</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: theme.card, borderColor: theme.border, color: theme.text }]}
                             placeholder="••••••••"
-                            placeholderTextColor="#64748B"
+                            placeholderTextColor={theme.muted}
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry
@@ -91,22 +96,23 @@ export default function LoginScreen() {
                     </View>
 
                     <TouchableOpacity
-                        style={styles.button}
+                        style={[styles.button, { backgroundColor: theme.accent }]}
                         onPress={signInWithEmail}
                         disabled={loading}
+                        activeOpacity={0.8}
                     >
                         {loading ? (
-                            <ActivityIndicator color="#FFFFFF" />
+                            <ActivityIndicator color={theme.primary} />
                         ) : (
-                            <Text style={styles.buttonText}>Se connecter</Text>
+                            <Text style={[styles.buttonText, { color: theme.primary }]}>Se connecter</Text>
                         )}
                     </TouchableOpacity>
 
                     <View style={styles.footer}>
-                        <Text style={styles.footerText}>Pas encore de compte ?</Text>
+                        <Text style={[styles.footerText, { color: theme.muted }]}>Pas encore de compte ?</Text>
                         <Link href="/(artist)/auth/register" asChild>
                             <TouchableOpacity>
-                                <Text style={styles.link}>S'inscrire</Text>
+                                <Text style={[styles.link, { color: theme.accent }]}>S'inscrire</Text>
                             </TouchableOpacity>
                         </Link>
                     </View>
@@ -119,7 +125,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0F172A',
     },
     scrollContent: {
         flexGrow: 1,
@@ -135,14 +140,11 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     title: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
+        ...Typography.presets.heading2,
         marginBottom: 8,
     },
     subtitle: {
-        fontSize: 16,
-        color: '#94A3B8',
+        ...Typography.presets.body,
         textAlign: 'center',
     },
     form: {
@@ -152,30 +154,28 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     label: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#E2E8F0',
+        ...Typography.presets.bodySmall,
+        fontFamily: Typography.families.medium,
     },
     input: {
-        backgroundColor: '#1E293B',
-        borderRadius: 12,
-        padding: 16,
-        color: '#FFFFFF',
-        fontSize: 16,
+        borderRadius: 16,
+        padding: 18,
+        ...Typography.presets.body,
         borderWidth: 1,
-        borderColor: '#334155',
     },
     button: {
-        backgroundColor: '#6366F1',
-        borderRadius: 12,
-        padding: 16,
+        borderRadius: 16,
+        padding: 18,
         alignItems: 'center',
         marginTop: 8,
+        shadowColor: Colors.dark.accent,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 5,
     },
     buttonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
+        ...Typography.presets.bodyBold,
     },
     footer: {
         flexDirection: 'row',
@@ -184,12 +184,10 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     footerText: {
-        color: '#94A3B8',
-        fontSize: 14,
+        ...Typography.presets.bodySmall,
     },
     link: {
-        color: '#818CF8',
+        ...Typography.presets.bodyBold,
         fontSize: 14,
-        fontWeight: 'bold',
     },
 })

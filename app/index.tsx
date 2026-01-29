@@ -3,9 +3,10 @@
 // Sélection du mode : Invité ou Artiste
 // ============================================
 
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Dimensions, Image } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Colors } from '../constants/Colors'
+import { Typography } from '../constants/Typography'
 
 const { width } = Dimensions.get('window')
 
@@ -19,10 +20,11 @@ export default function IndexScreen() {
 
             {/* Header Area */}
             <View style={styles.header}>
-                <View style={styles.logoPlaceholder}>
-                    <Text style={styles.logoText}>A</Text>
-                </View>
-                <Text style={styles.title}>AFRISENS</Text>
+                <Image
+                    source={require('../assets/new_icon.png')}
+                    style={styles.logoImage}
+                    resizeMode="contain"
+                />
                 <View style={styles.titleUnderline} />
                 <Text style={[styles.subtitle, { color: colorTheme.muted }]}>
                     Soutenez la louange, encouragez les cœurs.
@@ -37,8 +39,12 @@ export default function IndexScreen() {
                     onPress={() => router.push('/(guest)/artists')}
                     activeOpacity={0.8}
                 >
-                    <View style={[styles.iconContainer, { backgroundColor: colorTheme.primary + '20' }]}>
-                        <Text style={styles.modeIcon}>🙏</Text>
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('../assets/mains.png')}
+                            style={{ width: 60, height: 60, borderRadius: 12 }}
+                            resizeMode="cover"
+                        />
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={[styles.modeTitle, { color: colorTheme.text }]}>Je veux soutenir</Text>
@@ -54,8 +60,12 @@ export default function IndexScreen() {
                     onPress={() => router.push('/(artist)/auth/login')}
                     activeOpacity={0.8}
                 >
-                    <View style={[styles.iconContainer, { backgroundColor: colorTheme.accent + '20' }]}>
-                        <Text style={styles.modeIcon}>🎤</Text>
+                    <View style={styles.iconContainer}>
+                        <Image
+                            source={require('../assets/microphone.png')}
+                            style={{ width: 60, height: 60, borderRadius: 12 }}
+                            resizeMode="cover"
+                        />
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={[styles.modeTitle, { color: colorTheme.text }]}>Je suis chantre</Text>
@@ -90,43 +100,22 @@ const styles = StyleSheet.create({
         marginBottom: 40,
         alignItems: 'center',
     },
-    logoPlaceholder: {
-        width: 80,
-        height: 80,
-        borderRadius: 20,
-        backgroundColor: '#1E3A8A',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-        shadowColor: '#1E3A8A',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.4,
-        shadowRadius: 15,
-        elevation: 10,
-    },
-    logoText: {
-        fontSize: 40,
-        fontWeight: '900',
-        color: '#F59E0B',
-    },
-    title: {
-        fontSize: 36,
-        fontWeight: '900',
-        color: '#FFFFFF',
-        letterSpacing: 3,
+    logoImage: {
+        width: 140,
+        height: 140,
+        marginBottom: 10,
     },
     titleUnderline: {
         width: 40,
         height: 4,
-        backgroundColor: '#F59E0B',
+        backgroundColor: Colors.dark.accent,
         marginTop: 4,
         borderRadius: 2,
     },
     subtitle: {
-        fontSize: 16,
+        ...Typography.presets.body,
         marginTop: 15,
         textAlign: 'center',
-        fontWeight: '500',
         maxWidth: '80%',
     },
     modesContainer: {
@@ -147,7 +136,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     premiumButton: {
-        backgroundColor: '#1E293B',
+        backgroundColor: Colors.dark.card,
         borderWidth: 1.5,
     },
     iconContainer: {
@@ -158,20 +147,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 16,
     },
-    modeIcon: {
-        fontSize: 28,
-    },
     textContainer: {
         flex: 1,
     },
     modeTitle: {
-        fontSize: 20,
-        fontWeight: '800',
+        ...Typography.presets.heading3,
         marginBottom: 4,
     },
     modeDescription: {
-        fontSize: 13,
-        lineHeight: 18,
+        ...Typography.presets.bodySmall,
     },
     footer: {
         paddingVertical: 30,
@@ -184,14 +168,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     footerText: {
-        fontSize: 13,
-        fontWeight: '600',
+        ...Typography.presets.caption,
+        textTransform: 'none',
     },
     secureText: {
-        fontSize: 12,
-        fontWeight: '800',
+        ...Typography.presets.caption,
         marginTop: 4,
-        textTransform: 'uppercase',
-        letterSpacing: 1,
+        letterSpacing: 2,
     },
 })

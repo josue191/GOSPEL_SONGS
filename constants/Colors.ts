@@ -3,8 +3,8 @@
  * Modern, premium feel with Deep Blue and Gold accents.
  */
 
-const TintColorLight = '#1E3A8A';
-const TintColorDark = '#F59E0B';
+const TintColorLight = '#112940'; // Deep Blue from Icon
+const TintColorDark = '#EAB308'; // Gold/Yellow from Icon
 
 export const Colors = {
     light: {
@@ -13,7 +13,7 @@ export const Colors = {
         tint: TintColorLight,
         tabIconDefault: '#64748B',
         tabIconSelected: TintColorLight,
-        primary: '#1E3A8A',
+        primary: '#112940',
         secondary: '#334155',
         accent: '#D97706',
         muted: '#94A3B8',
@@ -22,16 +22,16 @@ export const Colors = {
     },
     dark: {
         text: '#F8FAFC',
-        background: '#0F172A',
+        background: '#04070D', // Darker, premium black-ish blue
         tint: TintColorDark,
         tabIconDefault: '#64748B',
         tabIconSelected: TintColorDark,
-        primary: '#1E3A8A',
+        primary: '#112940', // Deep Blue from Icon
         secondary: '#1E293B',
-        accent: '#F59E0B',
+        accent: '#EAB308', // Gold from Icon
         muted: '#64748B',
-        card: '#1E293B',
-        border: '#334155',
+        card: '#0F172A', // Navy Card
+        border: '#1E293B',
     },
 };
 

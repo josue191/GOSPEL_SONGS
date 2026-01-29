@@ -2,20 +2,21 @@ import { Stack } from 'expo-router'
 import { useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useRouter, useSegments } from 'expo-router'
+import { Colors } from '../../constants/Colors'
 
 export default function ArtistLayout() {
     return (
         <Stack
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#0F172A',
+                    backgroundColor: Colors.dark.card,
                 },
-                headerTintColor: '#fff',
+                headerTintColor: Colors.dark.text,
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
                 contentStyle: {
-                    backgroundColor: '#0F172A',
+                    backgroundColor: Colors.dark.background,
                 },
             }}
         >

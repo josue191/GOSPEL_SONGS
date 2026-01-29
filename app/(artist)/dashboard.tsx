@@ -12,10 +12,13 @@ import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { Database } from '../../types/database.types'
 
+import { Colors } from '../../constants/Colors'
+
 type ArtistBalance = Database['public']['Tables']['artist_balances']['Row']
 
 export default function ArtistDashboard() {
     const router = useRouter()
+    const theme = Colors.dark
     const [balance, setBalance] = useState<ArtistBalance | null>(null)
     const [loading, setLoading] = useState(true)
     const [artistName, setArtistName] = useState('')
@@ -65,35 +68,35 @@ export default function ArtistDashboard() {
 
     if (loading) {
         return (
-            <View style={[styles.container, styles.centerContent]}>
-                <ActivityIndicator size="large" color="#6366F1" />
+            <View style={[styles.container, styles.centerContent, { backgroundColor: theme.background }]}>
+                <ActivityIndicator size="large" color={theme.accent} />
             </View>
         )
     }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
             <View style={styles.header}>
-                <Text style={styles.welcomeText}>Bonjour,</Text>
-                <Text style={styles.artistName}>{artistName || 'Artiste'}</Text>
+                <Text style={[styles.welcomeText, { color: theme.muted }]}>Bonjour,</Text>
+                <Text style={[styles.artistName, { color: theme.text }]}>{artistName || 'Artiste'}</Text>
             </View>
 
             {/* Balance Card */}
-            <View style={styles.balanceCard}>
-                <Text style={styles.balanceLabel}>Solde Disponible</Text>
-                <Text style={styles.balanceAmount}>
+            <View style={[styles.balanceCard, { backgroundColor: theme.primary, shadowColor: theme.primary }]}>
+                <Text style={[styles.balanceLabel, { color: theme.muted + 'CC' }]}>Solde Disponible</Text>
+                <Text style={[styles.balanceAmount, { color: 'white' }]}>
                     {balance?.available_balance.toLocaleString()} FC
                 </Text>
-                <View style={styles.balanceStats}>
+                <View style={[styles.balanceStats, { borderTopColor: 'rgba(255,255,255,0.1)' }]}>
                     <View style={styles.statItem}>
-                        <Text style={styles.statLabel}>Total Gagné</Text>
-                        <Text style={styles.statValue}>
+                        <Text style={[styles.statLabel, { color: theme.muted + 'CC' }]}>Total Gagné</Text>
+                        <Text style={[styles.statValue, { color: 'white' }]}>
                             {balance?.total_earned.toLocaleString()} FC
                         </Text>
                     </View>
                     <View style={styles.statItem}>
-                        <Text style={styles.statLabel}>Total Retiré</Text>
-                        <Text style={styles.statValue}>
+                        <Text style={[styles.statLabel, { color: theme.muted + 'CC' }]}>Total Retiré</Text>
+                        <Text style={[styles.statValue, { color: 'white' }]}>
                             {balance?.total_withdrawn.toLocaleString()} FC
                         </Text>
                     </View>
@@ -103,34 +106,34 @@ export default function ArtistDashboard() {
             {/* Actions Grid */}
             <View style={styles.grid}>
                 <TouchableOpacity
-                    style={styles.card}
+                    style={[styles.card, { backgroundColor: theme.card }]}
                     onPress={() => router.push('/(artist)/songs')}
                 >
                     <Text style={styles.cardIcon}>🎵</Text>
-                    <Text style={styles.cardTitle}>Mes Chansons</Text>
-                    <Text style={styles.cardSubtitle}>Gérer ma musique</Text>
+                    <Text style={[styles.cardTitle, { color: theme.text }]}>Mes Chansons</Text>
+                    <Text style={[styles.cardSubtitle, { color: theme.muted }]}>Gérer ma musique</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={styles.card}
+                    style={[styles.card, { backgroundColor: theme.card }]}
                     onPress={() => router.push('/(artist)/payouts')}
                 >
                     <Text style={styles.cardIcon}>💸</Text>
-                    <Text style={styles.cardTitle}>Mes Retraits</Text>
-                    <Text style={styles.cardSubtitle}>Demander un paiement</Text>
+                    <Text style={[styles.cardTitle, { color: theme.text }]}>Mes Retraits</Text>
+                    <Text style={[styles.cardSubtitle, { color: theme.muted }]}>Demander un paiement</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={styles.card}
+                    style={[styles.card, { backgroundColor: theme.card }]}
                     onPress={() => router.push('/(artist)/transactions')}
                 >
                     <Text style={styles.cardIcon}>📜</Text>
-                    <Text style={styles.cardTitle}>Historique</Text>
-                    <Text style={styles.cardSubtitle}>Voir les dons</Text>
+                    <Text style={[styles.cardTitle, { color: theme.text }]}>Historique</Text>
+                    <Text style={[styles.cardSubtitle, { color: theme.muted }]}>Voir les dons</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.card, styles.logoutCard]}
+                    style={[styles.card, styles.logoutCard, { backgroundColor: theme.card }]}
                     onPress={handleSignOut}
                 >
                     <Text style={styles.cardIcon}>🚪</Text>
@@ -144,7 +147,6 @@ export default function ArtistDashboard() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0F172A',
         padding: 20,
     },
     centerContent: {
@@ -157,40 +159,34 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         fontSize: 16,
-        color: '#94A3B8',
     },
     artistName: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#FFFFFF',
     },
     balanceCard: {
-        backgroundColor: '#6366F1',
-        borderRadius: 20,
+        borderRadius: 24,
         padding: 24,
         marginBottom: 30,
-        shadowColor: '#6366F1',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
-        shadowRadius: 10,
-        elevation: 8,
+        shadowRadius: 20,
+        elevation: 10,
     },
     balanceLabel: {
         fontSize: 14,
-        color: '#E0E7FF',
         marginBottom: 8,
+        fontWeight: '600',
     },
     balanceAmount: {
         fontSize: 40,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
+        fontWeight: '900',
         marginBottom: 24,
     },
     balanceStats: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderTopWidth: 1,
-        borderTopColor: 'rgba(255,255,255,0.2)',
         paddingTop: 16,
     },
     statItem: {
@@ -198,12 +194,11 @@ const styles = StyleSheet.create({
     },
     statLabel: {
         fontSize: 12,
-        color: '#E0E7FF',
+        fontWeight: '600',
     },
     statValue: {
         fontSize: 16,
-        fontWeight: '600',
-        color: '#FFFFFF',
+        fontWeight: '800',
     },
     grid: {
         flexDirection: 'row',
@@ -212,15 +207,17 @@ const styles = StyleSheet.create({
         paddingBottom: 40,
     },
     card: {
-        width: '47%', // Slightly less than 50% to account for gap
-        backgroundColor: '#1E293B',
-        borderRadius: 16,
+        width: '47%',
+        borderRadius: 20,
         padding: 20,
         gap: 12,
-        // minHeight: 140,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 4,
     },
     logoutCard: {
-        backgroundColor: '#1E293B',
         borderColor: '#EF4444',
         borderWidth: 1,
     },
@@ -230,13 +227,11 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#FFFFFF',
     },
     logoutText: {
         color: '#EF4444',
     },
     cardSubtitle: {
         fontSize: 12,
-        color: '#94A3B8',
     },
 })

@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { Database } from '../../types/database.types'
 import { Colors } from '../../constants/Colors'
+import { Typography } from '../../constants/Typography'
 
 type Artist = Database['public']['Tables']['artists']['Row']
 
@@ -166,8 +167,7 @@ const styles = StyleSheet.create({
         gap: 12,
     },
     loadingText: {
-        fontSize: 16,
-        fontWeight: '500',
+        ...Typography.presets.body,
     },
     headerContainer: {
         padding: 20,
@@ -192,8 +192,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
-        fontSize: 16,
-        fontWeight: '500',
+        ...Typography.presets.body,
     },
     listContent: {
         padding: 20,
@@ -230,24 +229,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     placeholderText: {
-        fontSize: 24,
-        fontWeight: '900',
+        ...Typography.presets.heading2,
     },
     artistInfo: {
         flex: 1,
         justifyContent: 'center',
     },
     artistName: {
-        fontSize: 18,
-        fontWeight: '800',
+        ...Typography.presets.heading3,
         marginBottom: 2,
     },
     artistChurch: {
-        fontSize: 13,
-        fontWeight: '600',
+        ...Typography.presets.bodySmall,
+        fontFamily: Typography.families.medium,
         marginBottom: 4,
     },
     artistBio: {
+        ...Typography.presets.bodySmall,
         fontSize: 12,
         fontStyle: 'italic',
     },
@@ -272,8 +270,7 @@ const styles = StyleSheet.create({
         opacity: 0.3,
     },
     emptyText: {
-        fontSize: 16,
-        fontWeight: '600',
+        ...Typography.presets.body,
     },
     historyButton: {
         position: 'absolute',
@@ -282,16 +279,15 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 32,
         borderRadius: 30,
-        shadowColor: '#F59E0B',
+        shadowColor: Colors.dark.accent,
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
         shadowRadius: 20,
         elevation: 10,
     },
     historyButtonText: {
-        color: '#0F172A',
-        fontSize: 14,
-        fontWeight: '900',
-        letterSpacing: 1,
+        ...Typography.presets.caption,
+        color: Colors.dark.primary,
+        letterSpacing: 2,
     },
 })
