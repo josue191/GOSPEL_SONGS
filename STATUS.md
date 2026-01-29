@@ -1,7 +1,7 @@
 # 📊 STATUT DU PROJET AFRISENS
 
-**Dernière mise à jour** : 25 janvier 2026
-**Statut Global** : 🟢 **95% COMPLÉTÉ**
+**Dernière mise à jour** : 29 janvier 2026
+**Statut Global** : 🟢 **97% COMPLÉTÉ**
 
 ---
 
@@ -16,11 +16,12 @@
   - `cinetpay-webhook` : Confirmation et idempotence.
 - [x] **Stockage** : Bucket `verification-documents` pour KYC.
 
-### 📱 Application Mobile (Expo) - 90%
+### 📱 Application Mobile (Expo) - 98%
 - [x] **Navigation** : Structure Guest/Artist complète.
 - [x] **Flux Donateur** : Liste, détails, don, WebView, historique.
 - [x] **Mode Artiste** : Inscription multi-étapes (Stepper), upload KYC, dashboard.
 - [x] **Infrastructure Notifications** : Lib notifications prête, table device_tokens créée.
+- [x] **Expérience UI/UX** : Design Premium (Dark Theme, Or & Bleu), typographie Inter, et intégration d'icônes personnalisées.
 
 ### 💳 Intégration Paiement - 100% (Prêt pour Sandbox)
 - [x] Support Mobile Money RDC (v1 & v2 CinetPay).
